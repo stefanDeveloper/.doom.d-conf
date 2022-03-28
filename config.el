@@ -1,5 +1,20 @@
 ;; Mail Configuration
 
+(put 'customize-variable 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mml-secure-openpgp-encrypt-to-self t)
+ '(mml-secure-smime-encrypt-to-self t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 (setq notmuch-show-logo nil)
 (setq notmuch-always-prompt-for-sender 't)
 
@@ -28,8 +43,20 @@
 (setq notmuch-fcc-dirs '(("stefan.machmeier@urz.uni-heidelberg.de" . "work/Sent")
                          ("stefan-machmeier@outlook.com" . "private/Sent")))
 
+(defun message-recipients ()
+  "Return a list of all recipients in the message, looking at TO, CC and BCC. Each recipient is in the format of `mail-extract-address-components'."
+  (mapcan (lambda (header)
+            (let ((header-value (message-fetch-field header)))
+              (and
+               header-value
+               (mail-extract-address-components header-value t))))
+          '("To" "Cc" "Bcc")))
+
 ;; Sign messages by default.
-;; (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+;; (add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+
+;; Guided Encryption and sign settings, sometimes helpful
 ;; (setq mm-sign-option 'guided)
 
 ;; Encryption
@@ -50,17 +77,8 @@
 (setq mew-protect-privacy-always t)
 (setq mew-protect-privacy-always-type 'smime-signature)
 
-(add-hook 'message-send-hook 'mml-secure-message-encrypt-smime)
-(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
-
-(defun message-recipients ()
-  "Return a list of all recipients in the message, looking at TO, CC and BCC. Each recipient is in the format of `mail-extract-address-components'."
-  (mapcan (lambda (header)
-            (let ((header-value (message-fetch-field header)))
-              (and
-               header-value
-               (mail-extract-address-components header-value t))))
-          '("To" "Cc" "Bcc")))
+(add-hook 'message-encrypt-hook 'mml-secure-message-encrypt-pgpmime)
+;; (add-hook 'message-send-hook 'mml-secure-message-sign-smime)
 
 (defun message-all-epg-keys-available-p ()
   "Return non-nil if the pgp keyring has a public key for each recipient."
@@ -78,4 +96,4 @@
   (when (message-all-epg-keys-available-p)
     (mml-secure-message-sign-encrypt)))
 
-;; (add-hook 'message-send-hook 'message-sign-encrypt-if-all-keys-available)
+(add-hook 'message-send-hook 'message-sign-encrypt-if-all-keys-available)
