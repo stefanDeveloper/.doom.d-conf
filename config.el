@@ -52,10 +52,6 @@
                (mail-extract-address-components header-value t))))
           '("To" "Cc" "Bcc")))
 
-;; Sign messages by default.
-(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
-;; (add-hook 'message-send-hook 'mml-secure-message-sign-smime)
-
 ;; Guided Encryption and sign settings, sometimes helpful
 ;; (setq mm-sign-option 'guided)
 
@@ -77,9 +73,6 @@
 (setq mew-protect-privacy-always t)
 (setq mew-protect-privacy-always-type 'smime-signature)
 
-(add-hook 'message-encrypt-hook 'mml-secure-message-encrypt-pgpmime)
-;; (add-hook 'message-send-hook 'mml-secure-message-sign-smime)
-
 (defun message-all-epg-keys-available-p ()
   "Return non-nil if the pgp keyring has a public key for each recipient."
   (require 'epa)
@@ -96,4 +89,41 @@
   (when (message-all-epg-keys-available-p)
     (mml-secure-message-sign-encrypt)))
 
-(add-hook 'message-send-hook 'message-sign-encrypt-if-all-keys-available)
+;; Add to custom
+
+;; Sign messages by default.
+;; (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+;; Decrypt messages by default
+;; (add-hook 'message-encrypt-hook 'mml-secure-message-encrypt-pgpmime)
+;; (add-hook 'message-send-hook 'message-sign-encrypt-if-all-keys-available)
+
+;; (add-hook 'message-send-hook 'mml-secure-message-encrypt-smime)
+;; (add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+
+
+;;(load "/home/stefan/.doom.d/defaultencrypt/jl-encrypt.el")
+;;(load "/home/stefan/.doom.d/defaultencrypt/jl-smime.el")
+;; (setq epa-file-encrypt-to "")
+;; (setq epg-debug t)
+;; Allow automatic LDAP queries for certificates within my domain.
+;;(setq jl-smime-permit-ldap "@\\(.+\\.\\)?uni-heidelberg\\.de$")
+
+;; I'm searching for S/MIME certificates via LDAPS at DFN-Verein.
+;; Note that ldap.el in Emacs requires a minor workaround to perform
+;; encrypted connections via LDAPS.  In fact, ldapsearch is being invoked
+;; to use unencrypted plaintext LDAP communication with the parameter "-h".
+;; Maybe I'm doing something wrong but I only got LDAPS to work with the
+;; parameter "-H ldaps://ldap.pca.dfn.de".  To get rid of the default
+;; parameter -h, I'm passing the empty string as hostname, setting
+;; smime-ldap-host-list to '("").  Finally, ldapsearch aborts the
+;; connection if it is not told where to find the CA certificate for the
+;; LDAPS server (which is a Good Thing).
+;; I created ~/.ldaprc with a single line pointing to that CA certificate:
+;; TLS_CACERT /path/to/server/cert
+;;(require 'ldap)
+;;(setq smime-ldap-host-list '(""))
+;;(setq ldap-default-base "O=DFN-Verein,C=DE"
+;;      ; -x: no SASL authentication, -tt: store result in file
+;;      ; -H: connect to specified URI.
+;;      ldap-ldapsearch-args '("-x" "-tt" "-H ldaps://ldap.pca.dfn.de")
+;;      )
