@@ -29,6 +29,10 @@
 (setq mail-host-address "smachmeier.de")
 (setq user-full-name "Stefan Machmeier")
 
+(setq notmuch-fcc-dirs
+      '(("stefan-machmeier@outlook.com" . "private/Sent -inbox +sent -unread")
+        ("stefan.machmeier@urz.uni-heidelberg.de"     . "work/Sent -inbox +sent -unread")))
+
 ;; Compose Mail Settings
 ;; report problems with the smtp server
 (setq smtpmail-debug-info t)
