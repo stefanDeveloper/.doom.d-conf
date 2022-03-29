@@ -30,8 +30,8 @@
 (setq user-full-name "Stefan Machmeier")
 
 (setq notmuch-fcc-dirs
-      '(("stefan-machmeier@outlook.com" . "private/Sent -inbox +sent -unread")
-        ("stefan.machmeier@urz.uni-heidelberg.de"     . "work/Sent -inbox +sent -unread")))
+      '(("stefan-machmeier@outlook.com" . "Sent -inbox +sent -unread")
+        ("stefan.machmeier@urz.uni-heidelberg.de" . "Sent -inbox +sent -unread")))
 
 ;; Compose Mail Settings
 ;; report problems with the smtp server
@@ -43,9 +43,6 @@
 (setq message-kill-buffer-on-exit t)
 ;; change the directory to store the sent mail
 (setq message-directory "~/mails/")
-;; Saving sent mail in folders depending on from
-(setq notmuch-fcc-dirs '(("stefan.machmeier@urz.uni-heidelberg.de" . "work/Sent")
-                         ("stefan-machmeier@outlook.com" . "private/Sent")))
 
 (defun message-recipients ()
   "Return a list of all recipients in the message, looking at TO, CC and BCC. Each recipient is in the format of `mail-extract-address-components'."
