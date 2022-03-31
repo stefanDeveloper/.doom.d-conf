@@ -1,19 +1,8 @@
 ;; Mail Configuration
+(require 'notmuch)
 
-(put 'customize-variable 'disabled nil)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mml-secure-openpgp-encrypt-to-self t)
- '(mml-secure-smime-encrypt-to-self t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(setq mml-secure-openpgp-encrypt-to-self t)
+(setq mml-secure-smime-encrypt-to-self t)
 
 (setq notmuch-show-logo nil)
 (setq notmuch-always-prompt-for-sender 't)
@@ -29,9 +18,22 @@
 (setq mail-host-address "smachmeier.de")
 (setq user-full-name "Stefan Machmeier")
 
-(setq notmuch-fcc-dirs
-      '(("stefan-machmeier@outlook.com" . "Sent -inbox +sent -unread")
-        ("stefan.machmeier@urz.uni-heidelberg.de" . "Sent -inbox +sent -unread")))
+(setq notmuch-maildir-use-notmuch-insert nil)
+(setq notmuch-fcc-dirs '(
+        ("Stefan Machmeier <stefan-machmeier@outlook.com>" . "private/Sent")
+        ("Stefan Machmeier <stefan.machmeier@urz.uni-heidelberg.de>" . "work/Sent Items")))
+
+;This constructs a path, concatenating the content of the variable
+;"message-directory" and the second part in the alist:
+(defun my-fcc-header-setup ()
+  (let ((subdir (cdr (assoc (message-fetch-field "From") notmuch-fcc-dirs))))
+    (message-add-header (concat "Fcc: " message-directory subdir))))
+
+(add-hook 'message-send-hook 'my-fcc-header-setup)
+
+(setq message-fcc-handler-function
+  '(lambda (destdir)
+      (notmuch-maildir-fcc-write-buffer-to-maildir destdir t)))
 
 ;; Compose Mail Settings
 ;; report problems with the smtp server
@@ -42,7 +44,7 @@
 (setq message-auto-save-directory "~/mails/draft")
 (setq message-kill-buffer-on-exit t)
 ;; change the directory to store the sent mail
-(setq message-directory "~/mails/")
+(setq message-directory "~/mails")
 
 (defun message-recipients ()
   "Return a list of all recipients in the message, looking at TO, CC and BCC. Each recipient is in the format of `mail-extract-address-components'."
