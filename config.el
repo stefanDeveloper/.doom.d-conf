@@ -131,7 +131,7 @@
 ;;      ldap-ldapsearch-args '("-x" "-tt" "-H ldaps://ldap.pca.dfn.de")
 ;;      )
 
-(autoload 'gnus-alias-determine-identity "/home/stefan/.doom.d/gnus-alias/gnus-alias.el" "" t)
+(autoload 'gnus-alias-determine-identity "/home/stefan/.doom.d/gnus-alias.el" "" t)
 (add-hook 'message-setup-hook 'gnus-alias-determine-identity)
 ;; Define two identities, "home" and "work"
 (setq gnus-alias-identity-alist
