@@ -131,28 +131,28 @@
 ;;      ldap-ldapsearch-args '("-x" "-tt" "-H ldaps://ldap.pca.dfn.de")
 ;;      )
 
-;;(autoload 'gnus-alias-determine-identity "/home/stefan/.doom.d/gnus-alias/gnus-alias.el" "" t)
-;;(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
+(autoload 'gnus-alias-determine-identity "/home/stefan/.doom.d/gnus-alias/gnus-alias.el" "" t)
+(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
 ;; Define two identities, "home" and "work"
-;;(setq gnus-alias-identity-alist
-;;      '(("private"
-;;         nil ;; Does not refer to any other identity
-;;         "Stefan Machmeier <stefan-machmeier@outlook.com>" ;; Sender address
-;;         nil ;; No organization header
-;;         nil ;; No extra headers
-;;         nil ;; No extra body text
-;;        "~/.signature.prv")
-;;        ("work"
-;;         nil
-;;         "Stefan Machmeier <stefan.machmeier@urz.uni-heidelberg.de>"
-;;         "Universitätsrechenzentrum"
-;;         nil
-;;         nil
-;;         "~/.signature.work")))
+(setq gnus-alias-identity-alist
+      '(("private"
+         nil ;; Does not refer to any other identity
+         "Stefan Machmeier <stefan-machmeier@outlook.com>" ;; Sender address
+         nil ;; No organization header
+         nil ;; No extra headers
+         nil ;; No extra body text
+         "~/.signature.prv")
+        ("work"
+         nil
+         "Stefan Machmeier <stefan.machmeier@urz.uni-heidelberg.de>"
+         "Universitätsrechenzentrum"
+         nil
+         nil
+         "~/.signature.work")))
 ;; Use "work" identity by default
-;;(setq gnus-alias-default-identity "work")
+(setq gnus-alias-default-identity "work")
 ;; Define rules to match private identity
-;;(setq gnus-alias-identity-rules
-;;     '(("private" ("any" "stefan.machmeier@\\(outlook\\.com\\)" both) "private")))
+(setq gnus-alias-identity-rules
+     '(("private" ("any" "stefan.machmeier@\\(outlook\\.com\\)" both) "private")))
 ;; Determine identity when message-mode loads
-;;(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
+(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
