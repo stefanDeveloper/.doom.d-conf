@@ -7,6 +7,8 @@
 (setq notmuch-show-logo nil)
 (setq notmuch-always-prompt-for-sender 't)
 
+(setq mail-user-agent 'message-user-agent)
+
 ;; SMTP Settings
 (setq message-sendmail-f-is-evil 't)  ;; Remove unnecessary commands
 (setq sendmail-program "~/bin/msmtp") ;; Set to own shell for notify-send
