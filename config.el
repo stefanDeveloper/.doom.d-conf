@@ -46,7 +46,7 @@
 (setq message-auto-save-directory "~/mails/draft")
 (setq message-kill-buffer-on-exit t)
 ;; change the directory to store the sent mail
-(setq message-directory "~/mails")
+(setq message-directory "~/mails/")
 
 (defun message-recipients ()
   "Return a list of all recipients in the message, looking at TO, CC and BCC. Each recipient is in the format of `mail-extract-address-components'."
